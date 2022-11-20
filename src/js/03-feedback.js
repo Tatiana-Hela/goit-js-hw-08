@@ -25,7 +25,7 @@ function updateOutputOnload(e) {
   };
   const keys = Object.keys(formData);
   for (const key of keys) {
-    refs.form.elements = formData[key];
+    refs.form.elements[key].value = formData[key];
   }
 }
 
