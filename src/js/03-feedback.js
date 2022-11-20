@@ -9,24 +9,24 @@ const LOCAL_STORAGE_KEY = 'feedback-form-state';
 refs.form.addEventListener('input', throttle(onInputForm, 500));
 refs.form.addEventListener('submit', onSubmitForm);
 window.addEventListener('load', updateOutputOnload);
-
+let formData = {};
 function onInputForm(e) {
   e.preventDefault();
-  const message = refs.form.elements.message.value;
-  const email = refs.form.elements.email.value;
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ message, email }));
+  formData[e.target.name] = e.target.value;
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formData));
 }
 
 function updateOutputOnload(e) {
   e.preventDefault();
   const outputTextContent = localStorage.getItem(LOCAL_STORAGE_KEY);
-  const outputObjectContent = JSON.parse(outputTextContent) || {
+  formData = JSON.parse(outputTextContent) || {
     email: '',
     message: '',
   };
-  const { email, message } = outputObjectContent;
-  refs.form.elements.email.value = email;
-  refs.form.elements.message.value = message;
+  const keys = Object.keys(formData);
+  for (const key of keys) {
+    refs.form.elements = formData[key];
+  }
 }
 
 function onSubmitForm(e) {
